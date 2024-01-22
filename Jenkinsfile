@@ -9,8 +9,6 @@ node {
   stage('Quality Gate') {
             steps {
                 script {
-                    // Check SonarQube quality gate status
-                    withSonarQubeEnv('Your SonarQube Server') {
                         def qg = waitForQualityGate()
                         if (qg.status != 'OK') {
                             error "Quality Gate failed: ${qg.status}"
@@ -19,10 +17,7 @@ node {
                 }
             }
         }
-
-        // Add more stages for deployment, testing, etc.
-    }
-
+  }
     post {
         success {
             echo 'Pipeline succeeded! Ready for deployment.'
@@ -31,7 +26,3 @@ node {
             echo 'Pipeline failed. Quality Gate check failed.'
         }
     }
-}
-       }
-    }
-  }
