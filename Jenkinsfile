@@ -19,22 +19,25 @@ pipeline {
             }
         }
 
-        stage('Quality Gate') {
-            steps {
-                script {
-                    // Wait for the Quality Gate to complete
-                    def qg = waitForQualityGate()
-
-                    // Check the status of the Quality Gate
-                    if (qg.status != 'OK') {
-                        error "Quality Gate failed: ${qg.status}"
-                    }
-
-                    echo "Quality Gate passed: ${qg.status}"
-                }
+       stage('Quality Gate') {
+    steps {
+        script {
+            def qg = waitForQualityGate()
+            
+            // Check if the Quality Gate status is IN_PROGRESS
+            if (qg.status == 'IN_PROGRESS') {
+                // The Quality Gate is still in progress, handle accordingly
+                error "Quality Gate is still in progress. Please check later."
+            } else if (qg.status != 'OK') {
+                // The Quality Gate failed
+                error "Quality Gate failed: ${qg.status}"
+            } else {
+                // The Quality Gate passed
+                echo "Quality Gate passed: ${qg.status}"
             }
         }
     }
+}
 
     post {
         success {
