@@ -1,0 +1,2 @@
+projectKey=sonarcubetest
+serverUrl=http://34.227.152.40/
