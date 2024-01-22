@@ -1,26 +1,11 @@
-pipeline {
-    agent any
-
-    stages {
-        stage('Build') {
-            steps {
-                script {
-                    // Maven build
-                    sh 'mvn clean install'
-
-                    // Run SonarQube analysis
-                    withSonarQubeEnv('sonarqube') {
-                        sh 'mvn sonar:sonar'
-                    }
-                }
-            }
-        }
+node {
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def scannerHome = tool 'sonarqube';
+    withSonarQubeEnv() {
+      sh "${scannerHome}/bin/sonar-scanner"
     }
-
-    post {
-        always {
-            // Clean up
-            deleteDir()
-        }
-    }
+  }
 }
