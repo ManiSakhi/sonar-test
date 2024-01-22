@@ -1,11 +1,13 @@
 pipeline {
     agent any
+
     stages {
         stage('SCM') {
             steps {
                 checkout scm
             }
         }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -16,17 +18,24 @@ pipeline {
                 }
             }
         }
+
         stage('Quality Gate') {
             steps {
                 script {
+                    // Wait for the Quality Gate to complete
                     def qg = waitForQualityGate()
+
+                    // Check the status of the Quality Gate
                     if (qg.status != 'OK') {
                         error "Quality Gate failed: ${qg.status}"
                     }
+
+                    echo "Quality Gate passed: ${qg.status}"
                 }
             }
         }
     }
+
     post {
         success {
             echo 'Pipeline succeeded! Ready for deployment.'
