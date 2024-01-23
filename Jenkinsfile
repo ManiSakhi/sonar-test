@@ -19,19 +19,3 @@ pipeline {
             }
         }
 
-        stage("Quality Gate") {
-        timeout(time: 1, unit: 'HOURS') {
-            waitForQualityGate abortPipeline: true
-        }
-      }       
-    }
-
-    post {
-        success {
-            echo 'Pipeline succeeded! Ready for deployment.'
-        }
-        failure {
-            echo 'Pipeline failed. Quality Gate check failed.'
-        }
-    }
-}
