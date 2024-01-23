@@ -13,7 +13,7 @@ pipeline {
                 script {
                     def scannerHome = tool 'sonarqube'
                     withSonarQubeEnv() {
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.scanner.metadataFilePath=${WORKSPACE}/sonar-report/report-task.txt"
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
